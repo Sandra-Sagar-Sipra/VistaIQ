@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from app.api.deps import get_monitoring_source_service
+from app.auth.dependencies import get_current_user
 from app.core.exceptions import ConflictError, InvalidStateError, NotFoundError
 from app.schemas.monitoring_source import (
     IngestionMode,
@@ -16,7 +17,15 @@ from app.schemas.monitoring_source import (
 )
 from app.services.monitoring_source_service import MonitoringSourceService
 
-router = APIRouter(prefix="/api/v1/sources", tags=["Monitoring Sources"])
+# Applied at the router rather than per route, so a new endpoint added here
+# is authenticated by default. Securing endpoints one decorator at a time
+# means the one someone forgets is the one that leaks.
+router = APIRouter(
+    prefix="/api/v1/sources",
+    tags=["Monitoring Sources"],
+    dependencies=[Depends(get_current_user)],
+    responses={status.HTTP_401_UNAUTHORIZED: {"description": "Missing, expired or invalid token"}},
+)
 
 
 @router.get(

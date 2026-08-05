@@ -21,6 +21,9 @@ frontend/node_modules/
 frontend/.vite/
 *.tsbuildinfo
 
+# Agent / tooling state
+.letta/
+
 # IDE / OS
 .vscode/
 .idea/
