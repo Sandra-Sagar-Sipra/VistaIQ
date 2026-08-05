@@ -54,10 +54,30 @@ export default {
           foreground: "hsl(var(--warning-foreground) / <alpha-value>)",
         },
       },
+      fontFamily: {
+        sans: [
+          "InterVariable",
+          "Inter",
+          "ui-sans-serif",
+          "system-ui",
+          "-apple-system",
+          "sans-serif",
+        ],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        // Elevation instead of heavy borders: a resting card gets `card`,
+        // hover/active states step up to `elevated`. Values are tuned against
+        // the brand navy (#0F172A) rather than pure black, so shadows read as
+        // soft depth instead of a gray haze.
+        subtle: "0 1px 2px 0 rgb(15 23 42 / 0.04)",
+        card: "0 1px 2px 0 rgb(15 23 42 / 0.03), 0 1px 3px 0 rgb(15 23 42 / 0.06)",
+        elevated: "0 4px 16px -4px rgb(15 23 42 / 0.10), 0 2px 6px -2px rgb(15 23 42 / 0.06)",
+        popover: "0 8px 24px -4px rgb(15 23 42 / 0.12), 0 4px 8px -4px rgb(15 23 42 / 0.08)",
       },
       keyframes: {
         "accordion-down": {
@@ -68,10 +88,14 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        shimmer: {
+          "100%": { transform: "translateX(100%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        shimmer: "shimmer 1.6s infinite",
       },
     },
   },

@@ -1,6 +1,14 @@
-import { CheckCircle2, GitMerge, PlugZap, RefreshCw, ShieldAlert, type LucideIcon } from "lucide-react";
+import {
+  CheckCircle2,
+  Clock,
+  GitMerge,
+  PlugZap,
+  RefreshCw,
+  ShieldAlert,
+  type LucideIcon,
+} from "lucide-react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { DashboardCard } from "@/components/dashboard/DashboardCard";
 import { DashboardEmptyState } from "@/components/dashboard/DashboardEmptyState";
 import { DashboardErrorState } from "@/components/dashboard/DashboardErrorState";
 import { DashboardSkeleton } from "@/components/dashboard/DashboardSkeleton";
@@ -35,41 +43,40 @@ export function ActivityTimeline() {
   const events = data ? sortNewestFirst(data) : [];
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Recent Activity</CardTitle>
-        <CardDescription>Latest platform events, newest first</CardDescription>
-      </CardHeader>
-      <CardContent>
-        {isLoading ? (
-          <DashboardSkeleton variant="timeline" rows={5} />
-        ) : isError ? (
-          <DashboardErrorState onRetry={() => refetch()} />
-        ) : events.length === 0 ? (
-          <DashboardEmptyState />
-        ) : (
-          <ol className="space-y-5">
-            {events.map((event) => {
-              const meta = EVENT_META[event.type];
-              const Icon = meta.icon;
-              return (
-                <li key={event.id} className="flex items-start gap-3">
-                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${meta.className}`}>
-                    <Icon className="h-4 w-4" />
-                  </div>
-                  <div className="flex-1 pt-1">
-                    <p className="text-sm text-foreground">{event.message}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {event.actor ? `${event.actor} · ` : ""}
-                      {formatRelativeTime(event.timestamp)}
-                    </p>
-                  </div>
-                </li>
-              );
-            })}
-          </ol>
-        )}
-      </CardContent>
-    </Card>
+    <DashboardCard
+      title="Recent Activity"
+      description="Latest platform events, newest first"
+      icon={Clock}
+      className="lg:col-span-4"
+    >
+      {isLoading ? (
+        <DashboardSkeleton variant="timeline" rows={5} />
+      ) : isError ? (
+        <DashboardErrorState onRetry={() => refetch()} />
+      ) : events.length === 0 ? (
+        <DashboardEmptyState />
+      ) : (
+        <ol className="space-y-5">
+          {events.map((event) => {
+            const meta = EVENT_META[event.type];
+            const Icon = meta.icon;
+            return (
+              <li key={event.id} className="flex items-start gap-3">
+                <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${meta.className}`}>
+                  <Icon className="h-4 w-4" />
+                </div>
+                <div className="flex-1 pt-1">
+                  <p className="text-sm text-foreground">{event.message}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {event.actor ? `${event.actor} · ` : ""}
+                    {formatRelativeTime(event.timestamp)}
+                  </p>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      )}
+    </DashboardCard>
   );
 }

@@ -1,8 +1,10 @@
 import { type ReactNode, useEffect, useState } from "react";
 import { InteractionType } from "@azure/msal-browser";
 import { MsalAuthenticationTemplate } from "@azure/msal-react";
+import { Loader2 } from "lucide-react";
 
 import { initializeMsal, loginRequest } from "@/auth/msalConfig";
+import { Logo } from "@/components/Logo";
 
 /**
  * Blocks the application until the user is signed in.
@@ -15,17 +17,29 @@ import { initializeMsal, loginRequest } from "@/auth/msalConfig";
  * is deliberately no code here for it.
  */
 
-function FullScreenMessage({ title, detail }: { title: string; detail?: string }) {
+function FullScreenMessage({
+  title,
+  detail,
+  showSpinner = false,
+}: {
+  title: string;
+  detail?: string;
+  showSpinner?: boolean;
+}) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-2 p-6 text-center">
-      <p className="text-sm font-medium text-foreground">{title}</p>
-      {detail ? <p className="max-w-md text-sm text-muted-foreground">{detail}</p> : null}
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-6 text-center">
+      <Logo size={56} />
+      <div className="space-y-2">
+        <p className="text-sm font-medium text-foreground">{title}</p>
+        {detail ? <p className="max-w-md text-sm text-muted-foreground">{detail}</p> : null}
+      </div>
+      {showSpinner ? <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /> : null}
     </div>
   );
 }
 
 function SigningIn() {
-  return <FullScreenMessage title="Redirecting to Microsoft sign-in…" />;
+  return <FullScreenMessage title="Redirecting to Microsoft sign-in…" showSpinner />;
 }
 
 function SignInFailed({ error }: { error: unknown }) {
@@ -53,7 +67,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
   }, []);
 
   if (error) return <SignInFailed error={error} />;
-  if (!ready) return <FullScreenMessage title="Starting…" />;
+  if (!ready) return <FullScreenMessage title="Starting…" showSpinner />;
 
   return (
     <MsalAuthenticationTemplate

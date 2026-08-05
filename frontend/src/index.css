@@ -4,7 +4,9 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    /* Canvas sits a shade below white (#F8FAFC) so white cards read as
+       elevated surfaces without needing a heavy border to separate them. */
+    --background: 210 40% 98%;
     --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
@@ -13,32 +15,34 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    --primary: 222 47% 32%;
-    --primary-foreground: 210 40% 98%;
+    /* Brand blue, #2563EB. */
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 210 40% 96%;
     --secondary-foreground: 222 47% 11%;
 
-    --muted: 210 40% 96%;
+    --muted: 210 33% 95%;
     --muted-foreground: 215 16% 47%;
 
-    --accent: 210 40% 96%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 221 83% 96%;
+    --accent-foreground: 221 83% 40%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
-    --success: 142 71% 45%;
-    --success-foreground: 210 40% 98%;
+    --success: 142 71% 40%;
+    --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
-    --warning-foreground: 222 47% 11%;
+    --warning: 32 95% 47%;
+    --warning-foreground: 0 0% 100%;
 
+    /* Deliberately subtle -- these separate surfaces, they don't draw boxes. */
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 222 47% 32%;
+    --ring: 221 83% 53%;
 
-    --radius: 0.625rem;
+    --radius: 0.75rem;
   }
 
   .dark {
@@ -51,7 +55,7 @@
     --popover: 222 47% 10%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 217 55% 58%;
+    --primary: 217 91% 60%;
     --primary-foreground: 222 47% 11%;
 
     --secondary: 217 33% 17%;
@@ -83,6 +87,23 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@layer utilities {
+  /* Shimmer sweep for skeleton loaders, layered under the base pulse. */
+  .skeleton-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .skeleton-shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.4), transparent);
+    animation: shimmer 1.6s infinite;
   }
 }

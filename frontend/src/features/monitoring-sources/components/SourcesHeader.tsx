@@ -1,7 +1,6 @@
 import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { UserMenu } from "@/features/auth/components/UserMenu";
 
 export function SourcesHeader({ onAddSource }: { onAddSource: () => void }) {
   return (
@@ -12,13 +11,10 @@ export function SourcesHeader({ onAddSource }: { onAddSource: () => void }) {
           Connect and manage the monitoring, security, DevOps, and cloud tools VistaIQ ingests from.
         </p>
       </div>
-      <div className="flex items-center gap-2 sm:shrink-0">
-        <UserMenu />
-        <Button onClick={onAddSource}>
-          <Plus className="h-4 w-4" />
-          Add source
-        </Button>
-      </div>
+      <Button onClick={onAddSource} className="sm:shrink-0">
+        <Plus className="h-4 w-4" />
+        Add source
+      </Button>
     </div>
   );
 }

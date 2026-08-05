@@ -10,6 +10,7 @@ import { AuthGate } from "@/auth/AuthGate";
 import { msalInstance } from "@/auth/msalConfig";
 import { queryClient } from "@/lib/query-client";
 
+import "@fontsource-variable/inter";
 import "@/index.css";
 
 // MsalProvider wraps everything so any component can read auth state.
