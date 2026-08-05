@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import { DeleteSourceDialog } from "@/features/monitoring-sources/components/DeleteSourceDialog";
 import { SourceFormDrawer } from "@/features/monitoring-sources/components/SourceFormDrawer";
@@ -22,6 +23,17 @@ export function MonitoringSourcesPage() {
     source: null,
   });
   const [sourceToDelete, setSourceToDelete] = useState<MonitoringSource | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("action") === "add") {
+      setDrawerState({ open: true, source: null });
+      const next = new URLSearchParams(searchParams);
+      next.delete("action");
+      setSearchParams(next, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const debouncedSearch = useDebouncedValue(filters.search, 300);
 
