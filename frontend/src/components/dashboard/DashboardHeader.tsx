@@ -3,6 +3,7 @@ import { RefreshCw, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useIsFetching, useQueryClient } from "@tanstack/react-query";
 
+import { signOut } from "@/auth/msalConfig";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { useMe } from "@/features/auth/hooks/use-me";
 import {
   dashboardKeys,
   useActivityFeed,
@@ -24,10 +26,20 @@ import {
   useSourceStatus,
 } from "@/hooks/use-dashboard";
 
-const CURRENT_USER_EMAIL = "jaicind@siprahub.com";
-const CURRENT_USER_NAME = "VistaIQ Admin";
-
-function initials(email: string) {
+/**
+ * Two letters for the avatar: initials of the directory name when there is
+ * one ("Ada Lovelace" -> "AL"), otherwise the start of the address. Derived
+ * from the signed-in user rather than a constant, so it follows whoever is
+ * actually authenticated.
+ */
+function initials(displayName: string | null, email: string) {
+  const words = displayName?.trim().split(/\s+/).filter(Boolean) ?? [];
+  if (words.length >= 2) {
+    return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+  }
+  if (words.length === 1) {
+    return words[0].slice(0, 2).toUpperCase();
+  }
   return email.slice(0, 2).toUpperCase();
 }
 
@@ -35,6 +47,7 @@ export function DashboardHeader() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const { data: me } = useMe();
 
   const isFetching = useIsFetching({ queryKey: dashboardKeys.all }) > 0;
 
@@ -98,18 +111,20 @@ export function DashboardHeader() {
                 className="flex items-center gap-2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 <Avatar>
-                  <AvatarFallback>{initials(CURRENT_USER_EMAIL)}</AvatarFallback>
+                  <AvatarFallback>{me ? initials(me.display_name, me.email) : "…"}</AvatarFallback>
                 </Avatar>
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel className="font-normal">
-                <p className="text-sm font-medium text-foreground">{CURRENT_USER_NAME}</p>
-                <p className="text-xs text-muted-foreground">{CURRENT_USER_EMAIL}</p>
+                <p className="text-sm font-medium text-foreground">{me?.display_name || me?.email || "Signed in"}</p>
+                {me?.display_name ? (
+                  <p className="text-xs text-muted-foreground">{me.email}</p>
+                ) : null}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onSelect={() => navigate("/settings")}>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Sign out</DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => void signOut()}>Sign out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
