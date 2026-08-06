@@ -12,22 +12,33 @@ export interface DashboardSummary {
   applications: {
     total: number;
     trend: Trend;
+    /** Recent values for the KPI card's mini sparkline, oldest first. */
+    sparkline: number[];
   };
   open_alerts: {
     total: number;
     critical: number;
     high: number;
     trend: Trend;
+    sparkline: number[];
   };
   open_incidents: {
     total: number;
     trend: Trend;
+    sparkline: number[];
   };
   connected_sources: {
     connected: number;
     total: number;
     trend: Trend;
+    sparkline: number[];
   };
+}
+
+export interface RiskTrendPoint {
+  date: string;
+  /** Composite operational risk score, 0-100 (higher is riskier). */
+  risk_score: number;
 }
 
 export interface ApplicationHealthItem {

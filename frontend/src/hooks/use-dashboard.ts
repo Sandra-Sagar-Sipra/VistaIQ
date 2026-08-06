@@ -5,6 +5,7 @@ import {
   fetchApplicationHealth,
   fetchDashboardSummary,
   fetchRecentIncidents,
+  fetchRiskTrend,
   fetchSeverityBreakdown,
   fetchSourceStatus,
 } from "@/api/dashboard";
@@ -17,6 +18,7 @@ export const dashboardKeys = {
   incidents: () => [...dashboardKeys.all, "incidents"] as const,
   activity: () => [...dashboardKeys.all, "activity"] as const,
   sourceStatus: () => [...dashboardKeys.all, "source-status"] as const,
+  riskTrend: () => [...dashboardKeys.all, "risk-trend"] as const,
 };
 
 const REFRESH_INTERVAL_MS = 60_000;
@@ -65,6 +67,14 @@ export function useSourceStatus() {
   return useQuery({
     queryKey: dashboardKeys.sourceStatus(),
     queryFn: fetchSourceStatus,
+    refetchInterval: REFRESH_INTERVAL_MS,
+  });
+}
+
+export function useRiskTrend() {
+  return useQuery({
+    queryKey: dashboardKeys.riskTrend(),
+    queryFn: fetchRiskTrend,
     refetchInterval: REFRESH_INTERVAL_MS,
   });
 }

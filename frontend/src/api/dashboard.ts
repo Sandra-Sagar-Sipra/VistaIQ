@@ -4,6 +4,7 @@ import type {
   ApplicationHealthItem,
   DashboardSummary,
   RecentIncident,
+  RiskTrendPoint,
   SeverityBreakdownItem,
   SourceStatusItem,
 } from "@/types/dashboard";
@@ -32,4 +33,8 @@ export function fetchActivityFeed() {
 
 export function fetchSourceStatus() {
   return apiClient.get<SourceStatusItem[]>(`${BASE_PATH}/source-status`);
+}
+
+export function fetchRiskTrend() {
+  return apiClient.get<RiskTrendPoint[]>(`${BASE_PATH}/risk-trend`);
 }

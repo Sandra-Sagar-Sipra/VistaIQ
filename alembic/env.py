@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from app.core.config import get_settings
 from app.database.base import Base
 from app.models.monitoring_source import MonitoringSource  # noqa: F401 registers table metadata
+from app.models.user import AppUser  # noqa: F401 registers table metadata
 
 config = context.config
 
